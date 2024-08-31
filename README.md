@@ -2,16 +2,18 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <conio.h> // For getch() function
+#include <conio.h> 
 
-struct books {
+struct books 
+{
     int id;
     char bookName[50];
     char authorName[50];
     char date[12];
 } b;
 
-struct student {
+struct student 
+{
     int id;
     char sName[50];
     char sClass[50];
@@ -28,9 +30,11 @@ void del();
 void issueBook();
 void issueList();
 
-int main() {
+int main()
+ {
     int ch;
-    while (1) {
+    while (1)
+     {
         system("cls");
         printf("<== Library Management System ==>\n");
         printf("1. Add Book\n");
@@ -41,9 +45,9 @@ int main() {
         printf("0. Exit\n\n");
         printf("Enter your choice: ");
         scanf("%d", &ch);
-        getchar(); // Consume newline character left by scanf
-
-        switch (ch) {
+        getchar(); 
+        switch (ch) 
+        {
             case 0:
                 exit(0);
             case 1:
@@ -70,7 +74,8 @@ int main() {
     return 0;
 }
 
-void addBook() {
+void addBook() 
+{
     char myDate[12];
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -78,68 +83,77 @@ void addBook() {
     strcpy(b.date, myDate);
     
     fp = fopen("books.txt", "ab");
-    if (fp == NULL) {
+    if (fp == NULL) 
+    {
         perror("Unable to open file");
         return;
     }
 
     printf("Enter book id: ");
     scanf("%d", &b.id);
-    getchar(); // Consume newline character left by scanf
+    getchar(); 
 
     printf("Enter book name: ");
     fgets(b.bookName, sizeof(b.bookName), stdin);
-    b.bookName[strcspn(b.bookName, "\n")] = '\0'; // Remove newline character
+    b.bookName[strcspn(b.bookName, "\n")] = '\0'; 
 
     printf("Enter author name: ");
     fgets(b.authorName, sizeof(b.authorName), stdin);
-    b.authorName[strcspn(b.authorName, "\n")] = '\0'; // Remove newline character
+    b.authorName[strcspn(b.authorName, "\n")] = '\0'; 
 
     printf("Book Added Successfully\n");
     fwrite(&b, sizeof(b), 1, fp);
     fclose(fp);
 }
 
-void booksList() {
+void booksList()
+ {
     system("cls");
     printf("<== Available Books ==>\n\n");
     printf("%-10s %-30s %-20s %s\n\n", "Book id", "Book Name", "Author", "Date");
 
     fp = fopen("books.txt", "rb");
-    if (fp == NULL) {
+    if (fp == NULL) 
+    {
         perror("Unable to open file");
         return;
     }
 
-    while (fread(&b, sizeof(b), 1, fp) == 1) {
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+     {
         printf("%-10d %-30s %-20s %s\n", b.id, b.bookName, b.authorName, b.date);
     }
     fclose(fp);
 }
 
-void del() {
+void del() 
+{
     int id, f = 0;
     system("cls");
     printf("<== Remove Books ==>\n\n");
     printf("Enter Book id to remove: ");
     scanf("%d", &id);
-    getchar(); // Consume newline character left by scanf
+    getchar();
 
     FILE *ft = fopen("temp.txt", "wb");
-    if (ft == NULL) {
+    if (ft == NULL) 
+    {
         perror("Unable to open file");
         return;
     }
 
     fp = fopen("books.txt", "rb");
-    if (fp == NULL) {
+    if (fp == NULL) 
+    {
         perror("Unable to open file");
         fclose(ft);
         return;
     }
 
-    while (fread(&b, sizeof(b), 1, fp) == 1) {
-        if (id == b.id) {
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+     {
+        if (id == b.id) 
+        {
             f = 1;
         } else {
             fwrite(&b, sizeof(b), 1, ft);
@@ -148,7 +162,8 @@ void del() {
     fclose(fp);
     fclose(ft);
 
-    if (f == 1) {
+    if (f == 1) 
+    {
         printf("\n\nDeleted Successfully.\n");
         remove("books.txt");
         rename("temp.txt", "books.txt");
@@ -169,7 +184,7 @@ void issueBook()
     printf("<== Issue Books ==>\n\n");
    printf("Enter Book id to issue: ");
     scanf("%d", &s.id);
- //Check if we have book of given id
+ 
     fp = fopen("books.txt", "rb");
     while(fread(&b, sizeof(b), 1, fp) == 1)
 {
@@ -190,11 +205,14 @@ fp = fopen("issue.txt", "ab");
 printf("Enter Student Name: ");
 fflush(stdin);
 gets(s.sName);
+
 printf("Enter Student Class: ");
 fflush(stdin);
 gets(s.sClass);
+
 printf("Enter Student Roll: ");
 scanf("%d", &s.sRoll);
+
 printf("Book Issued Successfully\n\n");
 fwrite(&s, sizeof(s), 1, fp);
 fclose(fp);
@@ -203,7 +221,7 @@ void issueList()
 {
     system("cls");
     printf("<== Book Issue List ==>\n\n");
-    printf("%-10s %-30s %-20s %-10s %-30s %s\n\n", "S.id", "Name", "Class", "Roll", "Book         Name", "Date");
+    printf("%-10s %-30s %-20s %-10s %-30s %s\n\n", "S.id", "Name", "Class", "Roll", "Book  Name", "Date");
     fp = fopen("issue.txt", "rb");
     while(fread(&s, sizeof(s), 1, fp) == 1)
 {
